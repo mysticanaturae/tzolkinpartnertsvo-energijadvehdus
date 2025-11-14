@@ -302,8 +302,10 @@
 </div>
 
 <script>
+// ----------------------------
 // VALIDACIJA EMAILA
-  function validateUserInput() {
+// ----------------------------
+function validateUserInput() {
     const email = document.getElementById('email').value.trim();
     const consent = document.getElementById('dataConsent').checked;
     let valid = true;
@@ -314,11 +316,11 @@
     consentError.style.display = 'none';
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(!emailRegex.test(email)){ emailError.style.display='block'; valid=false; }
-    if(!consent){ consentError.style.display='block'; valid=false; }
+    if(!emailRegex.test(email)) { emailError.style.display='block'; valid=false; }
+    if(!consent) { consentError.style.display='block'; valid=false; }
 
     return valid;
-  }
+}
 
 // ----------------------------
 // Tvoji podatki (slike, teksti)
@@ -454,61 +456,53 @@ function showKin(date, type){
     document.getElementById(`${type}ToneDesc`).innerText = toneTexts[tone-1] || '';
     document.getElementById(`${type}SignDesc`).innerText = signTexts[sign-1] || '';
 
-    // Vrnemo objekt, da lahko nadaljujemo izračune
     return { tone, sign };
 }
 
 // ----------------------------
 // ANALIZA ODNOSA
 // ----------------------------
-function analyzeRelationship(sign1, sign2, tone1, tone2){
+function analyzeRelationship(sign1, sign2){
     const colors = ["rdeča","rumena","modra","bela"];
     const color1 = colors[sign1 % 4];
     const color2 = colors[sign2 % 4];
 
     const types = {
-      "rumena": { "rumena": "Opolnomočeno", "modra": "Podporno", "bela": "Izzivajoče", "rdeča": "Misteriozno" },
-      "modra":   { "modra": "Opolnomočeno", "bela": "Misteriozno", "rdeča": "Izzivajoče", "rumena": "Podporno" },
-      "bela":    { "bela": "Opolnomočeno", "rdeča": "Podporno", "rumena": "Izzivajoče", "modra": "Misteriozno" },
-      "rdeča":   { "rdeča": "Opolnomočeno", "rumena": "Misteriozno", "modra": "Izzivajoče", "bela": "Podporno" }
+        "rumena": { "rumena": "Opolnomočeno", "modra": "Podporno", "bela": "Izzivajoče", "rdeča": "Misteriozno" },
+        "modra":   { "modra": "Opolnomočeno", "bela": "Misteriozno", "rdeča": "Izzivajoče", "rumena": "Podporno" },
+        "bela":    { "bela": "Opolnomočeno", "rdeča": "Podporno", "rumena": "Izzivajoče", "modra": "Misteriozno" },
+        "rdeča":   { "rdeča": "Opolnomočeno", "rumena": "Misteriozno", "modra": "Izzivajoče", "bela": "Podporno" }
     };
 
     const descriptions = {
-      'Opolnomočeno': 'To razmerje daje moč in harmonijo obema.',
-      'Misteriozno': 'Razmerje skriva globoke skrivnosti in učenja.',
-      'Izzivajoče': 'Tu se pojavljajo preizkušnje, ki krepijo.',
-      'Podporno': 'Partnerja drug drugemu nudita oporo in stabilnost.'
+        'Opolnomočeno': 'To razmerje daje moč in harmonijo obema.',
+        'Misteriozno': 'Razmerje skriva globoke skrivnosti in učenja.',
+        'Izzivajoče': 'Tu se pojavljajo preizkušnje, ki krepijo.',
+        'Podporno': 'Partnerja drug drugemu nudita oporo in stabilnost.'
     };
 
     const valuesByType = {
-      "Opolnomočeno": { love: 90, compat: 85, harmony: 95, karma: 60 },
-      "Izzivajoče":    { love: 60, compat: 70, harmony: 55, karma: 80 },
-      "Misteriozno":   { love: 75, compat: 80, harmony: 70, karma: 70 },
-      "Podporno":      { love: 95, compat: 90, harmony: 95, karma: 50 }
+        "Opolnomočeno": { love: 90, compat: 85, harmony: 95, karma: 60 },
+        "Izzivajoče":    { love: 60, compat: 70, harmony: 55, karma: 80 },
+        "Misteriozno":   { love: 75, compat: 80, harmony: 70, karma: 70 },
+        "Podporno":      { love: 95, compat: 90, harmony: 95, karma: 50 }
     };
 
     const type = types[color1][color2];
 
     return {
-      type: type,
-      desc: descriptions[type],
-      love: valuesByType[type].love,
-      compat: valuesByType[type].compat,
-      harmony: valuesByType[type].harmony,
-      karma: valuesByType[type].karma
+        type: type,
+        desc: descriptions[type],
+        ...valuesByType[type]
     };
 }
 
 // ----------------------------
-// FUNKCIJA ZA IZRAČUN KALKULATORJA
+// KALKULATOR PARTNERJA
 // ----------------------------
 function calculatePartnerKin(){
-    const val1 = document.getElementById("partner1").value;
-    const val2 = document.getElementById("partner2").value;
-    if(!val1 || !val2){ alert("Prosimo, vnesi oba datuma rojstva."); return; }
-
-    const p1 = new Date(val1);
-    const p2 = new Date(val2);
+    const p1 = new Date(document.getElementById("partner1").value);
+    const p2 = new Date(document.getElementById("partner2").value);
 
     const kin1 = showKin(p1,'partner1');
     const kin2 = showKin(p2,'partner2');
@@ -522,7 +516,8 @@ function calculatePartnerKin(){
     document.getElementById('combinedToneDesc').innerText = combinedToneTexts[combinedTone-1]||'';
     document.getElementById('combinedSignDesc').innerText = combinedSignTexts[combinedSign-1]||'';
 
-    const analysis = analyzeRelationship(kin1.sign, kin2.sign, kin1.tone, kin2.tone);
+    const analysis = analyzeRelationship(kin1.sign, kin2.sign);
+
     document.getElementById('relationshipType').innerText = analysis.type;
     document.getElementById('relationshipDescription').innerText = analysis.desc;
     document.getElementById('lovePercent').innerText = analysis.love+'%';
@@ -536,114 +531,85 @@ function calculatePartnerKin(){
 }
 
 // ----------------------------
-// SAMODEJNI IZRAČUN OB VNOSU DATUMOV
+// AUTO IZRAČUN OB VNOSU
 // ----------------------------
 document.getElementById("partner1").addEventListener("change", autoCalculateOracle);
 document.getElementById("partner2").addEventListener("change", autoCalculateOracle);
 
 function autoCalculateOracle() {
-    const val1 = document.getElementById("partner1").value;
-    const val2 = document.getElementById("partner2").value;
-    if(val1 && val2 && validateUserInput()) {
-        calculatePartnerKin();
-    }
+    if(validateUserInput()) calculatePartnerKin();
 }
 
 // ----------------------------
-// PRO MODAL – odpri in zapri
+// MODAL
 // ----------------------------
 const proModal = document.getElementById('proModal');
-const proButton = document.getElementById('proButton');
-const closeModal = document.getElementById('closeModal');
-
-proButton.addEventListener('click', () => {
+document.getElementById('proButton').addEventListener('click', () => {
     proModal.style.display = 'flex';
     document.getElementById('proEmail').value = localStorage.getItem('proEmail') || '';
     document.getElementById('partner1Dob').value = localStorage.getItem('proDate1') || '';
     document.getElementById('partner2Dob').value = localStorage.getItem('proDate2') || '';
 });
-
-closeModal.addEventListener('click', () => proModal.style.display = 'none');
-
-window.addEventListener('click', (e) => {
-    if(e.target === proModal) proModal.style.display = 'none';
-});
+document.getElementById('closeModal').addEventListener('click', () => proModal.style.display = 'none');
+window.addEventListener('click', (e) => { if(e.target === proModal) proModal.style.display='none'; });
 
 // ----------------------------
-// IZBIRA PAKETA
+// IZBIRA PAKETA + PAYPAL
 // ----------------------------
 let selectedPackage = "";
 function selectPackage(pkg){
     selectedPackage = pkg;
     document.getElementById('selectedPackage').value = pkg;
-    alert("Izbrali ste " + pkg + " paket.\nZdaj vnesita podatke in kliknita 'Oddaj naročilo'.");
+    alert("Izbrali ste " + pkg + " paket. Zdaj vnesita podatke in kliknita 'Oddaj naročilo'.");
 }
 
-// ----------------------------
-// SHRANJEVANJE + POŠILJANJE PODATKOV + PAYPAL
-// ----------------------------
 document.getElementById('orderForm').addEventListener('submit', async function(e){
     e.preventDefault();
 
-    const partner1Name = document.getElementById('partner1Name').value.trim();
-    const partner1Dob = document.getElementById('partner1Dob').value;
-    const partner2Name = document.getElementById('partner2Name').value.trim();
-    const partner2Dob = document.getElementById('partner2Dob').value;
-    const email = document.getElementById('proEmail').value.trim();
-    const pkg = selectedPackage;
-
-    if(!partner1Name || !partner1Dob || !partner2Name || !partner2Dob || !email || !pkg){
+    if(!validateUserInput() || !selectedPackage){
         alert("Prosimo, izpolnite vsa polja in izberite paket.");
         return;
     }
 
-    // Shrani lokalno
+    const email = document.getElementById('proEmail').value.trim();
     localStorage.setItem('proEmail', email);
-    localStorage.setItem('proDate1', partner1Dob);
-    localStorage.setItem('proDate2', partner2Dob);
+    localStorage.setItem('proDate1', document.getElementById('partner1Dob').value);
+    localStorage.setItem('proDate2', document.getElementById('partner2Dob').value);
 
-    // Pošlji podatke na email preko FormSubmit
-    const formData = new FormData();
-    formData.append("Paket", pkg);
-    formData.append("Email", email);
-    formData.append("Ime", partner1Name);
-    formData.append("Rojstni datum", partner1Dob);
-    formData.append("Ime partnerja", partner2Name);
-    formData.append("Rojstni datum partnerja", partner2Dob);
-
+    const formData = new FormData(this);
     try{
-        const response = await fetch("https://formsubmit.co/ajax/mysticaholistica888@gmail.com", {
+        await fetch("https://formsubmit.co/ajax/mysticaholistica888@gmail.com", {
             method: "POST",
             body: formData
         });
-        const result = await response.json();
         alert("Hvala! Podatki so poslani. Zdaj se bo odprlo PayPal plačilo.");
     }catch(err){
         alert("Napaka pri pošiljanju podatkov: " + err);
         return;
     }
 
-    // PayPal povezave
     const paypalUrls = {
         "S": "https://www.paypal.com/ncp/payment/XVZBXE5EKW7AY",
         "M": "https://www.paypal.com/ncp/payment/NG3G4YFLUW3CE",
         "L": "https://www.paypal.com/ncp/payment/E87P2EKNV9ZSN",
         "XL": "https://www.paypal.com/ncp/payment/27JY39QBBFHA8"
     };
+    if(paypalUrls[selectedPackage]) window.open(paypalUrls[selectedPackage], "_blank");
 
-    if(paypalUrls[pkg]) window.open(paypalUrls[pkg], "_blank");
-
-    // Zapri modal in reset obrazec
     proModal.style.display = 'none';
     this.reset();
     selectedPackage = "";
+});
 
+// ----------------------------
+// SERVICE WORKER
+// ----------------------------
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(reg => console.log('Service Worker registered', reg))
-      .catch(err => console.log('Service Worker registration failed', err));
-  });
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Service Worker registered', reg))
+            .catch(err => console.log('Service Worker registration failed', err));
+    });
 }
 </script>
 </body>
