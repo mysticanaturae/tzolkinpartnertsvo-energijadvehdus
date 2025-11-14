@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Partnerstvo – energija dveh duš</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#990000">
+<style>
+  :root{
+    --bg1:#4d0000;
+    --bg2:#990000;
+    --card:#fff7f5;
+    --accent:#ff6b6b;
+    --text:#330000;
+    --muted:#aa4444;
+    --meter-bg:#ffd6d6;
+    --meter-fill:#ff6666;
+    --meter-accent:#ff9a9a;
+  }
+  html, body { height:100%; margin:0; font-family:'Raleway',sans-serif; background:linear-gradient(180deg,var(--bg1),var(--bg2)); color:var(--card); }
+  .wrap { position:relative; z-index:2; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; box-sizing:border-box; }
+  .card { width:100%; max-width:980px; background: linear-gradient(180deg, rgba(255,247,245,0.98), rgba(255,247,245,0.92)); border-radius:18px; padding:20px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); color:var(--text); position:relative; overflow:hidden; border:1px solid rgba(255,255,255,0.06);}
+  header{text-align:center; margin-bottom:8px;}
+  header h1{font-family:'Great Vibes',cursive; color:#cc0000; font-size:44px; margin:4px 0;}
+  header p{color:var(--muted); margin:0 0 6px 0;}
+  .grid{display:grid; grid-template-columns: 1fr 380px; gap:20px; align-items:start; position:relative; z-index:1;}
+  @media (max-width:900px){.grid{grid-template-columns:1fr;} .rightCol{order:2}}
+  .left { padding:8px 6px 6px 6px; }
+  .bigKin { background:linear-gradient(180deg,#fff0f0,#fff7f5); padding:14px; border-radius:12px; text-align:left; color:var(--text); box-shadow:0 8px 20px rgba(0,0,0,0.06); margin-bottom:16px;}
+  .bigKin h2{margin:0;font-size:18px;color:#cc0000}
+  .kinNumber{font-size:26px;font-weight:700;color:#990000;margin-top:8px;}
+  .kin-slike{display:flex; gap:8px; align-items:center; margin-top:8px;}
+  .kin-slike img{width:48px; height:48px; border-radius:8px; object-fit:cover; border:1px solid #eee;}
+  .description, .affirmation, .combinedMsg {margin-top:12px; padding:12px; background:#fff0f0; border-radius:10px; color:#330000; box-shadow:inset 0 1px 0 rgba(255,255,255,0.6);}
+  .rightCol { background: linear-gradient(180deg, rgba(11,107,99,0.03), rgba(11,107,99,0.01)); padding:14px; border-radius:12px; }
+  label{display:block; font-size:14px; color:#660000; margin-bottom:6px; font-weight:600}
+  input[type="date"], input[type="email"], select{width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e6e6; box-sizing:border-box; font-size:15px; margin-bottom:10px}
+  .controls {display:flex; gap:8px; flex-wrap:wrap;}
+  button {padding:10px 12px; border-radius:10px; border:none; cursor:pointer; font-weight:600}
+  .btnPrimary {background:linear-gradient(180deg,#cc0000,#990000); color:#fff; box-shadow:0 6px 18px rgba(0,0,0,0.12)}
+  footer{margin-top:18px; text-align:center; color:var(--muted); font-size:13px}
+  .oracle-card {margin-top: 14px; background: linear-gradient(180deg, #fff6f6, #fff0f0); border-radius: 14px; padding: 14px; text-align: left; box-shadow: 0 6px 18px rgba(0,0,0,0.06); color: #4a0000;}
+  .oracle-card h3 {margin:0 0 6px 0; font-family: 'Great Vibes', cursive; color: #b30000; font-size: 1.6em;}
+  .oracle-desc {font-size:0.95rem; color:#4a0000; padding:10px; background:#fffefc; border-radius:10px;}
+  .meter { height: 12px; width: 100%; background: var(--meter-bg); border-radius: 8px; overflow:hidden; }
+  .meter-fill { height:100%; background: var(--meter-fill); width:0%; transition:width .9s ease; }
+  .stat-line { display:flex; gap:8px; align-items:center; justify-content:space-between; margin-top:8px; }
+  .stat-label { font-size:0.92rem; color:#660000; }
+  .stat-percent { font-weight:700; color:#660000; }
+  .icon { font-size:1.1rem; margin-right:8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <header>
+      <h1>Partnerstvo – energija dveh duš</h1>
+      <p>Vnesi rojstni datum obeh partnerjev in odkrij vajino skupno energijo ter orakelj odnosa.</p>
+    </header>
+
+    <div class="grid">
+      <!-- LEVA STRAN: prikaz Kina -->
+      <div class="left">
+        <div class="bigKin">
+          <h2>Tvoj Rojstni Kin</h2>
+          <div id="partner1Kin" class="kinNumber">—</div>
+          <div class="kin-slike">
+            <img id="partner1ToneImg" src="" alt="Tone 1">
+            <img id="partner1SignImg" src="" alt="Sign 1">
+          </div>
+          <div id="partner1ToneDesc" class="description">—</div>
+          <div id="partner1SignDesc" class="affirmation">—</div>
+        </div>
+
+        <div class="bigKin">
+          <h2>Partnerjev Rojstni Kin</h2>
+          <div id="partner2Kin" class="kinNumber">—</div>
+          <div class="kin-slike">
+            <img id="partner2ToneImg" src="" alt="Tone 2">
+            <img id="partner2SignImg" src="" alt="Sign 2">
+          </div>
+          <div id="partner2ToneDesc" class="description">—</div>
+          <div id="partner2SignDesc" class="affirmation">—</div>
+        </div>
+
+        <div class="bigKin">
+          <h2>Vajina Skupna Energija</h2>
+          <div id="combinedKin" class="kinNumber">—</div>
+          <div class="kin-slike">
+            <img id="combinedToneImg" src="" alt="Tone combined">
+            <img id="combinedSignImg" src="" alt="Sign combined">
+          </div>
+          <div id="combinedToneDesc" class="description">—</div>
+          <div id="combinedSignDesc" class="affirmation">—</div>
+        </div>
+      </div>
+
+      <!-- DESNA STRAN: vnos in orakelj -->
+  <div class="rightCol">
+    <label for="partner1">Tvoj datum rojstva</label>
+    <input id="partner1" type="date" />
+    
+    <label for="partner2">Datum rojstva tvojega partnerja</label>
+    <input id="partner2" type="date" />
+
+    <label for="email">Tvoj email (obvezen za prikaz)</label>
+    <input id="email" type="email" placeholder="vnesi svoj email" />
+    <small id="email-error" style="color:#b30000; display:none;">Prosimo, vnesi veljaven email.</small>
+
+    <div style="margin-top:6px;">
+      <input type="checkbox" id="dataConsent">
+      <label for="dataConsent" style="font-size:14px; color:#444;">
+        Potrjujem, da se moji podatki uporabijo za izračun in prikaz energije odnosa.
+      </label>
+    </div>
+    <small id="consent-error" style="color:#b30000; display:none;">Prosimo, potrdi soglasje za obdelavo podatkov.</small>
+
+    <div class="controls">
+      <button class="btnPrimary" onclick="if(validateUserInput()){calculatePartnerKin();}">
+        Prikaži vajino skupno energijo
+      </button>
+    </div>
+
+    <div id="relationshipOracle" class="oracle-card" aria-live="polite">
+      <h3>🔮 Orakelj Odnosov Duše</h3>
+      <div id="relationshipSummary" class="oracle-desc">
+        Kakšno razmerje ustvarjata? Opolnomočeno, Podporno, Izzivajoče ali Misteriozno?
+      </div>
+
+      <div style="margin-top:10px;">
+        <strong id="relationshipType">—</strong>
+      </div>
+
+      <div id="relationshipDescription" style="margin-top:8px; font-size:0.95rem; color:#4a0000;"></div>
+
+      <div style="margin-top:12px;">
+        <div class="stat-line"><div class="stat-label"><span class="icon">💖</span>Ljubezen</div><div class="stat-percent" id="lovePercent">—</div></div>
+        <div class="meter"><div id="loveFill" class="meter-fill" style="width:0%; background:#ff6b81;"></div></div>
+
+        <div class="stat-line"><div class="stat-label"><span class="icon">🔥</span>Kompatibilnost</div><div class="stat-percent" id="compatPercent">—</div></div>
+        <div class="meter"><div id="compatFill" class="meter-fill" style="width:0%; background:#f9c74f;"></div></div>
+
+        <div class="stat-line"><div class="stat-label"><span class="icon">🌿</span>Harmonija</div><div class="stat-percent" id="harmonyPercent">—</div></div>
+        <div class="meter"><div id="harmonyFill" class="meter-fill" style="width:0%; background:#90be6d;"></div></div>
+
+        <div class="stat-line"><div class="stat-label"><span class="icon">🕯️</span>Karmična vez</div><div class="stat-percent" id="karmaPercent">—</div></div>
+        <div class="meter"><div id="karmaFill" class="meter-fill" style="width:0%; background:#577590;"></div></div>
+      </div>
+    
+     <!-- Gumb PRO verzija -->
+<div class="controls" style="margin-top:10px;">
+  <button id="proButton" class="btnPrimary" style="background:#336699">
+    Odpri PRO verzijo
+  </button>
+</div>
+
+<!-- 🔮 PRO MODAL (skrito, dokler ne kliknejo gumba) -->
+<div id="proModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+  background:rgba(0,0,0,0.85); overflow:auto; padding:50px; z-index:1000; font-family:'Raleway', sans-serif;">
+  <div id="proModalContent" style="background:linear-gradient(to bottom, #1b1b2f, #2c2c44);
+    margin:auto; padding:30px; max-width:850px; border-radius:20px; position:relative; 
+    box-shadow:0 0 50px rgba(255,255,255,0.2); color:#fdf6e3;">
+    <span id="closeModal" style="position:absolute; top:15px; right:25px; cursor:pointer; font-size:28px; color:#fdf6e3;">&times;</span>
+
+    <h2 style="text-align:center; font-family:'Great Vibes', cursive; font-size:36px; color:#ffdd99;">
+      Izberi svoj paket Pro verzije
+    </h2>
+
+    <!-- Tvoji paketi (S, M, L, XL) in obrazec ostanejo tukaj -->
+<div class="packages">
+
+  <div class="package-card s-paket">
+    <h3>S Paket – "Prebuditev energij"</h3>
+    <p><strong>Cena:</strong> 19,90 €</p>
+    <p>Odpirata vrata vajinega partnerskega potovanja. Prejmeta jasnoviden vpogled v vajina števila in znamenja, ki budi energijo, ki jo vnašata v odnos. Majhen svetlobni kompas, ki vaju usmeri na pravo pot in prebudi dinamiko vajine povezave.</p>
+    <p><strong>Dostopnost:</strong> Po plačilu prejmeta opis na vajin email v 24 urah.</p>
+    <button type="button" onclick="selectPackage('S')">Izberi paket S</button>
+  </div>
+
+  <div class="package-card m-paket">
+    <h3>M Paket – "Odprtje globin"</h3>
+    <p><strong>Cena:</strong> 49,90 €</p>
+    <p>Globlje razumevanje in harmonija. Razširjen vpogled v osebne energije in skupno dinamiko, sončni in senčni aspekti vajinih števil in znamenj, odkrivanje skritih izzivov ter harmonije, ki oblikuje vajin odnos.</p>
+    <p><strong>Dostopnost:</strong> Po plačilu prejmeta opis na vajin email v 48 urah.</p>
+    <button type="button" onclick="selectPackage('M')">Izberi paket M</button>
+  </div>
+
+  <div class="package-card l-paket">
+    <h3>L Paket – "Sinteza povezav"</h3>
+    <p><strong>Cena:</strong> 99 €</p>
+    <p>Celovit vpogled in modrost. Vse osebne energije in skupna dinamika, podrobna razlaga sončnih in senčnih vidikov ter ključne lekcije za rast odnosa. Praktični napotki in meditativni predlogi za prepoznavanje skritih ritmov in vzorcev.</p>
+    <p><strong>Dostopnost:</strong> Po plačilu prejmeta opis na vajin email v 72 urah.</p>
+    <button type="button" onclick="selectPackage('L')">Izberi paket L</button>
+  </div>
+
+  <div class="package-card xl-paket">
+    <h3>XL Paket – "Razsvetljenje povezave"</h3>
+    <p><strong>Cena:</strong> 149 €</p>
+    <p>Popolna mistična kartografija vajine duhovne poti. Celostna analiza vseh vajinih števil in znamenj, interpretacija energij, karmičnih vzorcev in potencialov razsvetljenja. A4 zemljevid duhovne poti vajinega odnosa, za subtilno uskladitev skupne energije.</p>
+    <p><strong>Dostopnost:</strong> Po plačilu prejmeta opis na vajin email v 96 urah.</p>
+    <button type="button" onclick="selectPackage('XL')">Izberi paket XL</button>
+  </div>
+
+  <!-- Obrazec za naročilo -->
+  <form id="orderForm">
+    <label for="name">Ime:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="package">Izbrani paket:</label>
+    <input type="text" id="selectedPackage" name="package" readonly required>
+
+    <button type="submit">Oddaj naročilo</button>
+  </form>
+</div>
+
+<script>
+  function selectPackage(pkg) {
+    document.getElementById('selectedPackage').value = pkg;
+    alert("Izbrali ste paket: " + pkg);
+  }
+</script>
+
+<style>
+  .packages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+  }
+  .package-card {
+    border-radius: 15px;
+    padding: 20px;
+    width: 320px;
+    text-align: left;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .package-card h3 {
+    font-family: 'Great Vibes', cursive;
+    margin-bottom: 10px;
+  }
+  .package-card button {
+    margin-top: 15px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .package-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.35);
+  }
+
+  /* Mistične barve po energijah paketov */
+  .s-paket { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
+  .s-paket button { background: #ff6f61; }
+  .m-paket { background: linear-gradient(135deg, #a1c4fd, #c2e9fb); }
+  .m-paket button { background: #3498db; }
+  .l-paket { background: linear-gradient(135deg, #fbc2eb, #a6c1ee); }
+  .l-paket button { background: #9b59b6; }
+  .xl-paket { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+  .xl-paket button { background: #27ae60; }
+
+  #orderForm {
+    width: 100%;
+    max-width: 700px;
+    margin: 30px auto 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: #333;
+  }
+  #orderForm input, #orderForm button {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  #orderForm button {
+    background-color: #8e44ad;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  #orderForm button:hover {
+    background-color: #732d91;
+  }
+</style>
+  
+</script>
+
+<footer>© 2025 Mystica Naturae — Sveto partnerstvo</footer>
+  </div>
+</div>
+
+<script>
+// VALIDACIJA EMAILA
+  function validateUserInput() {
+    const email = document.getElementById('email').value.trim();
+    const consent = document.getElementById('dataConsent').checked;
+    let valid = true;
+
+    const emailError = document.getElementById('email-error');
+    const consentError = document.getElementById('consent-error');
+    emailError.style.display = 'none';
+    consentError.style.display = 'none';
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!emailRegex.test(email)){ emailError.style.display='block'; valid=false; }
+    if(!consent){ consentError.style.display='block'; valid=false; }
+
+    return valid;
+  }
+
+// ----------------------------
+// Tvoji podatki (slike, teksti)
+// ----------------------------
+const tzolkinNumberImages = [
+  "https://static.wixstatic.com/media/7535eb_8128aa403fb34a39a9abf4c539e07d4e~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_58d9713024fd44e3b574ed6e66319df3~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_fa772de6b389412a874060866aafe0d0~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_034123a9c80d497da70e29c529f761ab~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_0949be53659a4112b79aeaf88fba4182~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_31c0710a2c40451c8be0474fca598690~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_abc754938a3c47e5a3b497a802fbbc09~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_a195a39082484f0eafd271594204fd99~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_62f1b1f66190462faf5af9be6f04e3f3~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_630ea6308de14ff089b351e4f1967594~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_b098132554904e4d8d689176145249a0~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_6cf0d4b4439a46eb952d52e6cd02bb28~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_a5b6f5b75b254f1ca65fbe7cafb8086e~mv2.png"
+];
+
+const defaultKinImages = [
+  "https://static.wixstatic.com/media/7535eb_8b15827f3f0749f58b47edf2ec8ff34a~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_da5c22d0b20c4650ae78bd78d44bdf90~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_1431fb4ee97a418383209553a73974e5~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_63fa92348cef45778a33ea8df474f3b8~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_b144e80ceccc4304b10027e8d2f1e674~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_9eda107ea6ed46e8880d6cd3394b3eca~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_498008e2e9fb4c7ebc66e4a2cf25a1d4~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_a86c9fe89c5f4f4d8a810c284e40bf13~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_b1612f1d298245a483212ca3997b6872~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_fcf459036d31451fb913cd556bdf98b1~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_c5e4c01f59e74424806a8b82d55ea9c9~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_8b1bd5f0bebf4e9e84734d0dd7c18a55~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_5a43cbda692c4bff8790b8d4fe769ec5~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_891ac2c5109f44c8927f69170b93aa78~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_bcc1d28cea634696895554c9f25a2788~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_acd453dcd54e4ca29483cb610e3bab2e~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_d413aa3902864a09a3c2bb1ae2996b53~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_57d9eafe0dd249ddb5194e43a629e516~mv2.png",
+  "https://static.wixstatic.com/media/7535eb_413ee006283f479dbb46cc737b796bb4~mv2.png"
+];
+
+// Opisi za TONE
+const toneTexts = [
+  "Število 1 – V odnos vnašaš pogum in akcijo, ki prebuja vajino skupno energijo.",
+  "Število 2 – S svojo prilagodljivostjo ustvarjaš ravnovesje in harmonijo v vajinem odnosu.",
+  "Število 3 – Tvoja ustvarjalnost in izražanje bogatita vajino skupno izkušnjo.",
+  "Število 4 – Prinašaš stabilnost in jasne temelje, ki krepijo zaupanje med vama.",
+  "Število 5 – Vajin odnos oplemenitiš s svojo dinamiko in pripravljenostjo na spremembe.",
+  "Število 6 – Povezuješ harmonijo in sodelovanje, ki bogatita vajino povezanost.",
+  "Število 7 – S svojo introspektivnostjo in modrostjo vnašaš globino v vajin odnos.",
+  "Število 8 – Prinašaš moč in odločnost, ki spodbujata vajin skupni uspeh.",
+  "Število 9 – Učiš in spodbujaš introspektivno rast, ki obogatita vajin odnos.",
+  "Število 10 – S svojo transformacijsko energijo preoblikuješ izkušnje v skupno rast.",
+  "Število 11 – Prinašaš vizijo in navdih, ki razširjata vajin horizont in zavedanje.",
+  "Število 12 – Integriraš izkušnje in zaključke, ki krepijo vajino povezanost.",
+  "Število 13 – Sinteza in razsvetljenje, ki prinašata globoko povezanost in vpogled."
+];
+
+// Opisi za ZNAKE
+const signTexts = [
+  "Krokodil / Imix – Ustvarjaš energijo novih začetkov in spodbujaš rast vajine skupne poti.",
+  "Veter / Ik – Vnašaš komunikacijo in navdih, ki prebujata srce vajinega odnosa.",
+  "Zora / Akbal – S svojo introspektivnostjo odpiraš globoke vpoglede in sanje, ki bogatijo vajino povezavo.",
+  "Kuščar / Kan – Prinašaš obilje in energijo, ki podpirata rast vajinega odnosa.",
+  "Kača / Chicchan – Tvoja vitalnost in strast vnašata ogenj in živahnost v vajin skupni svet.",
+  "Smrt / Cimi – Omogočaš transformacijo in prehode, ki čistijo preteklost in krepijo sedanjost.",
+  "Jelen / Manik – Povezuješ z naravo in prinašaš zdravilno energijo v vajino skupno izkušnjo.",
+  "Zajec / Lamat – Radost, lepota in harmonija, ki bogatijo vajin skupni prostor.",
+  "Voda / Muluc – Prinašaš čustveno čistost in refleksijo, ki poglabljata vajino povezanost.",
+  "Pes / Oc – Tvoja zvestoba in predanost krepita družinsko energijo med vama.",
+  "Opica / Chuen – S humorjem in ustvarjalnostjo prinašaš igro in lahkotnost v vajin odnos.",
+  "Cesta / Eb – Usmerjaš v zavest o namenu in smeri, ki krepita vajino partnersko energijo.",
+  "Trsje / Ben – Prinašaš rast, potovanja in energijo novih izkušenj, ki bogatijo vajino skupno pot.",
+  "Jaguar / Ix – Povezuješ modrost z naravo in intuitivno močjo, ki odpira globoko razumevanje.",
+  "Orel / Men – Tvoja moč in vizija prinašata transformacijo in pogum za skupno rast.",
+  "Sova / Cib – Osvetljuješ odnos s toplino, radostjo in svetlobo, ki bogatita vajino energijo.",
+  "Zemlja / Caban – Prinašaš gibanje, spremembe in povezanost z zemeljskimi ritmi v vajin odnos.",
+  "Ogledalo / Etzanab – Tvoja energija odpira vpoglede in inspiracijo, ki bogatita vajino pot.",
+  "Nevihta / Cauac – Prinašaš intuicijo in čustveno globino, ki krepita vajino povezanost.",
+  "Sonce / Ahau – Tvoja duhovna moč in modrost vnašata globoko razumevanje in razsvetljenje v vajin odnos."
+];
+  
+  // --- Tvoji teksti za tone + znamenja ---
+const combinedToneTexts = [
+  "Skupaj ustvarjata nove začetke in pogum za skupne projekte",
+  "Skupaj ustvarjata ravnovesje in harmonijo v odnos",
+  "Skupaj ustvarjata kreativnost in veselje v izražanju",
+  "Skupaj gradita stabilnost in trdno strukturo povezave",
+  "Skupaj ustvarjata dinamiko, gibanje in nove priložnosti",
+  "Skupaj ustvarjata harmonijo, sodelovanje in ljubezen",
+  "Skupaj razvijata modrost, introspektivnost in globoko povezavo",
+  "Skupaj ustvarjata moč, uspeh in materialno stabilnost",
+  "Skupaj ustvarjata učenje, introspektivnost in duhovno rast",
+  "Skupaj ustvarjata preobrazbo in transformacijo odnosa",
+  "Skupaj ustvarjata vizijo in navdih za prihodnost",
+  "Skupaj ustvarjata integracijo, zaključke in celovitost",
+  "Skupaj ustvarjata sintezo, razsvetljenje in višjo zavest"
+];
+
+const combinedSignTexts = [
+  "Skupaj ustvarjata moč ustvarjanja in sposobnost začeti novo",
+  "Skupaj ustvarjata komunikacijo, navdih in energijo sprememb",
+  "Skupaj ustvarjata introspektivnost, sanje in notranjo modrost",
+  "Skupaj ustvarjata rast, obilje in energijo za materialne projekte",
+  "Skupaj ustvarjata vitalnost, strast in energijo transformacije",
+  "Skupaj ustvarjata prehode, zaključke in sposobnost transformacije",
+  "Skupaj ustvarjata zdravljenje, povezanost z naravo in podporo",
+  "Skupaj ustvarjata lepoto, harmonijo in radost v odnos",
+  "Skupaj ustvarjata čustveno čistost in globoko refleksijo",
+  "Skupaj ustvarjata zvestobo, predanost in moč družine",
+  "Skupaj ustvarjata ustvarjalnost, humor in radost",
+  "Skupaj ustvarjata jasen namen, smer in ravnovesje",
+  "Skupaj ustvarjata rast, potovanje in energijo novih izkušenj"
+];
+
+const anchorDate = new Date("1800-01-01");
+const anchorTone = 10;
+const anchorSignIdx = 14;
+
+// ----------------------------
+// FUNKCIJA ZA PRIKAZ KINA
+// ----------------------------
+function showKin(date, type){
+    const diffDays = Math.floor((date - anchorDate)/(1000*60*60*24));
+    const tone = ((anchorTone-1+diffDays)%13+13)%13+1;
+    const sign = ((anchorSignIdx-1+diffDays)%20+20)%20+1;
+    const signName = signTexts[sign-1].split(' / ')[0];
+
+    document.getElementById(`${type}Kin`).innerText = `${tone} ${signName}`;
+    document.getElementById(`${type}ToneImg`).src = tzolkinNumberImages[tone-1] || '';
+    document.getElementById(`${type}SignImg`).src = defaultKinImages[sign-1] || '';
+    document.getElementById(`${type}ToneDesc`).innerText = toneTexts[tone-1] || '';
+    document.getElementById(`${type}SignDesc`).innerText = signTexts[sign-1] || '';
+
+    // Vrnemo objekt, da lahko nadaljujemo izračune
+    return { tone, sign };
+}
+
+// ----------------------------
+// ANALIZA ODNOSA
+// ----------------------------
+function analyzeRelationship(sign1, sign2, tone1, tone2){
+    const colors = ["rdeča","rumena","modra","bela"];
+    const color1 = colors[sign1 % 4];
+    const color2 = colors[sign2 % 4];
+
+    const types = {
+      "rumena": { "rumena": "Opolnomočeno", "modra": "Podporno", "bela": "Izzivajoče", "rdeča": "Misteriozno" },
+      "modra":   { "modra": "Opolnomočeno", "bela": "Misteriozno", "rdeča": "Izzivajoče", "rumena": "Podporno" },
+      "bela":    { "bela": "Opolnomočeno", "rdeča": "Podporno", "rumena": "Izzivajoče", "modra": "Misteriozno" },
+      "rdeča":   { "rdeča": "Opolnomočeno", "rumena": "Misteriozno", "modra": "Izzivajoče", "bela": "Podporno" }
+    };
+
+    const descriptions = {
+      'Opolnomočeno': 'To razmerje daje moč in harmonijo obema.',
+      'Misteriozno': 'Razmerje skriva globoke skrivnosti in učenja.',
+      'Izzivajoče': 'Tu se pojavljajo preizkušnje, ki krepijo.',
+      'Podporno': 'Partnerja drug drugemu nudita oporo in stabilnost.'
+    };
+
+    const valuesByType = {
+      "Opolnomočeno": { love: 90, compat: 85, harmony: 95, karma: 60 },
+      "Izzivajoče":    { love: 60, compat: 70, harmony: 55, karma: 80 },
+      "Misteriozno":   { love: 75, compat: 80, harmony: 70, karma: 70 },
+      "Podporno":      { love: 95, compat: 90, harmony: 95, karma: 50 }
+    };
+
+    const type = types[color1][color2];
+
+    return {
+      type: type,
+      desc: descriptions[type],
+      love: valuesByType[type].love,
+      compat: valuesByType[type].compat,
+      harmony: valuesByType[type].harmony,
+      karma: valuesByType[type].karma
+    };
+}
+
+// ----------------------------
+// FUNKCIJA ZA IZRAČUN KALKULATORJA
+// ----------------------------
+function calculatePartnerKin(){
+    const val1 = document.getElementById("partner1").value;
+    const val2 = document.getElementById("partner2").value;
+    if(!val1 || !val2){ alert("Prosimo, vnesi oba datuma rojstva."); return; }
+
+    const p1 = new Date(val1);
+    const p2 = new Date(val2);
+
+    const kin1 = showKin(p1,'partner1');
+    const kin2 = showKin(p2,'partner2');
+
+    const combinedTone = (kin1.tone + kin2.tone) % 13 || 13;
+    const combinedSign = (kin1.sign + kin2.sign) % 20 || 20;
+
+    document.getElementById('combinedKin').innerText = `${combinedTone} ${signTexts[combinedSign-1].split(' / ')[0]}`;
+    document.getElementById('combinedToneImg').src = tzolkinNumberImages[combinedTone-1]||'';
+    document.getElementById('combinedSignImg').src = defaultKinImages[combinedSign-1]||'';
+    document.getElementById('combinedToneDesc').innerText = combinedToneTexts[combinedTone-1]||'';
+    document.getElementById('combinedSignDesc').innerText = combinedSignTexts[combinedSign-1]||'';
+
+    const analysis = analyzeRelationship(kin1.sign, kin2.sign, kin1.tone, kin2.tone);
+    document.getElementById('relationshipType').innerText = analysis.type;
+    document.getElementById('relationshipDescription').innerText = analysis.desc;
+    document.getElementById('lovePercent').innerText = analysis.love+'%';
+    document.getElementById('compatPercent').innerText = analysis.compat+'%';
+    document.getElementById('harmonyPercent').innerText = analysis.harmony+'%';
+    document.getElementById('karmaPercent').innerText = analysis.karma+'%';
+    document.getElementById('loveFill').style.width = analysis.love+'%';
+    document.getElementById('compatFill').style.width = analysis.compat+'%';
+    document.getElementById('harmonyFill').style.width = analysis.harmony+'%';
+    document.getElementById('karmaFill').style.width = analysis.karma+'%';
+}
+
+// ----------------------------
+// SAMODEJNI IZRAČUN OB VNOSU DATUMOV
+// ----------------------------
+document.getElementById("partner1").addEventListener("change", autoCalculateOracle);
+document.getElementById("partner2").addEventListener("change", autoCalculateOracle);
+
+function autoCalculateOracle() {
+    const val1 = document.getElementById("partner1").value;
+    const val2 = document.getElementById("partner2").value;
+    if(val1 && val2 && validateUserInput()) {
+        calculatePartnerKin();
+    }
+}
+
+// ----------------------------
+// PRO MODAL – odpri in zapri
+// ----------------------------
+const proModal = document.getElementById('proModal');
+const proButton = document.getElementById('proButton');
+const closeModal = document.getElementById('closeModal');
+
+proButton.addEventListener('click', () => {
+    proModal.style.display = 'flex';
+    document.getElementById('proEmail').value = localStorage.getItem('proEmail') || '';
+    document.getElementById('partner1Dob').value = localStorage.getItem('proDate1') || '';
+    document.getElementById('partner2Dob').value = localStorage.getItem('proDate2') || '';
+});
+
+closeModal.addEventListener('click', () => proModal.style.display = 'none');
+
+window.addEventListener('click', (e) => {
+    if(e.target === proModal) proModal.style.display = 'none';
+});
+
+// ----------------------------
+// IZBIRA PAKETA
+// ----------------------------
+let selectedPackage = "";
+function selectPackage(pkg){
+    selectedPackage = pkg;
+    document.getElementById('selectedPackage').value = pkg;
+    alert("Izbrali ste " + pkg + " paket.\nZdaj vnesita podatke in kliknita 'Oddaj naročilo'.");
+}
+
+// ----------------------------
+// SHRANJEVANJE + POŠILJANJE PODATKOV + PAYPAL
+// ----------------------------
+document.getElementById('orderForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    const partner1Name = document.getElementById('partner1Name').value.trim();
+    const partner1Dob = document.getElementById('partner1Dob').value;
+    const partner2Name = document.getElementById('partner2Name').value.trim();
+    const partner2Dob = document.getElementById('partner2Dob').value;
+    const email = document.getElementById('proEmail').value.trim();
+    const pkg = selectedPackage;
+
+    if(!partner1Name || !partner1Dob || !partner2Name || !partner2Dob || !email || !pkg){
+        alert("Prosimo, izpolnite vsa polja in izberite paket.");
+        return;
+    }
+
+    // Shrani lokalno
+    localStorage.setItem('proEmail', email);
+    localStorage.setItem('proDate1', partner1Dob);
+    localStorage.setItem('proDate2', partner2Dob);
+
+    // Pošlji podatke na email preko FormSubmit
+    const formData = new FormData();
+    formData.append("Paket", pkg);
+    formData.append("Email", email);
+    formData.append("Ime", partner1Name);
+    formData.append("Rojstni datum", partner1Dob);
+    formData.append("Ime partnerja", partner2Name);
+    formData.append("Rojstni datum partnerja", partner2Dob);
+
+    try{
+        const response = await fetch("https://formsubmit.co/ajax/mysticaholistica888@gmail.com", {
+            method: "POST",
+            body: formData
+        });
+        const result = await response.json();
+        alert("Hvala! Podatki so poslani. Zdaj se bo odprlo PayPal plačilo.");
+    }catch(err){
+        alert("Napaka pri pošiljanju podatkov: " + err);
+        return;
+    }
+
+    // PayPal povezave
+    const paypalUrls = {
+        "S": "https://www.paypal.com/ncp/payment/XVZBXE5EKW7AY",
+        "M": "https://www.paypal.com/ncp/payment/NG3G4YFLUW3CE",
+        "L": "https://www.paypal.com/ncp/payment/E87P2EKNV9ZSN",
+        "XL": "https://www.paypal.com/ncp/payment/27JY39QBBFHA8"
+    };
+
+    if(paypalUrls[pkg]) window.open(paypalUrls[pkg], "_blank");
+
+    // Zapri modal in reset obrazec
+    proModal.style.display = 'none';
+    this.reset();
+    selectedPackage = "";
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => console.log('Service Worker registered', reg))
+      .catch(err => console.log('Service Worker registration failed', err));
+  });
+}
+</script>
+</body>
+</html>
